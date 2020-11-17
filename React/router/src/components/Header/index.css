@@ -1,0 +1,26 @@
+.header-content{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+.header-content .left h1{
+  line-height: 60px;
+}
+.header-content .right{
+  height: 100%;
+  line-height: 60px;
+}
+.header-content .right span{
+  font-size: 18px;
+  color: #008c8c;
+  margin-right: 30px;
+}
+.header-content .right button{
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #4671c6;
+  cursor: pointer;
+}

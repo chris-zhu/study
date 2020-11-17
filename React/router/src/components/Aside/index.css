@@ -1,0 +1,15 @@
+ul{
+  width: 100%;
+}
+
+li{
+  padding: 10px;
+  text-align: center;
+}
+li:hover{
+  background-color: lightyellow;
+  cursor: pointer;
+}
+.active{
+  background-color: lightyellow;
+}

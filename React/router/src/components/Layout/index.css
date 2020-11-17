@@ -1,0 +1,29 @@
+.container{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: bisque;
+}
+.container .header{
+  height: 60px;
+  background-color: #333;
+  color: #fff; 
+}
+.container .wrapper{
+  height: calc(100% - 60px);
+  display: flex;
+}
+.wrapper .left{
+  width: 15%;
+  height: 100%;
+  background-color: lightcoral;
+  overflow: auto;
+}
+.wrapper .rigth{
+  padding: 20px;
+  flex: 1;
+  box-sizing: border-box;
+  background-color: lightblue;
+}

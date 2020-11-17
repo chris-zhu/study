@@ -1,0 +1,28 @@
+.arrow span {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, .5);
+  width: 20px;
+  height: 30px;
+  line-height: 30px;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+}
+
+.arrow span:hover {
+  background: rgba(0, 0, 0, .7);
+}
+
+.arrow .left {
+  border-radius: 0 30px 30px 0;
+  left: 0;
+}
+
+.arrow .right {
+  border-radius: 30px 0 0 30px;
+  right: 0;
+  padding-left: 6px;
+}
