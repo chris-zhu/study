@@ -11,6 +11,10 @@ import {
   isPlainObject
 } from 'shared/util'
 
+/**
+ * 事件修饰符会添加前缀
+ * 如果事件后面带有修饰符，例如once，该函数将解析出来
+ */
 const normalizeEvent = cached((name: string): {
   name: string,
   once: boolean,
@@ -74,6 +78,7 @@ export function updateListeners (
         vm
       )
     } else if (isUndef(old)) {
+      // 判断该事件名在oldOn中是否存在，如果不存在，则add注册事件
       if (isUndef(cur.fns)) {
         cur = on[name] = createFnInvoker(cur, vm)
       }
@@ -82,10 +87,12 @@ export function updateListeners (
       }
       add(event.name, cur, event.capture, event.passive, event.params)
     } else if (cur !== old) {
+      // 如果在oldOn中存在，但是并不相同，则替换
       old.fns = cur
       on[name] = old
     }
   }
+  // 循环oldOn ，如果不存在，则移除事件
   for (name in oldOn) {
     if (isUndef(on[name])) {
       event = normalizeEvent(name)

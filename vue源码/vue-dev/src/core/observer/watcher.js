@@ -34,7 +34,7 @@ export default class Watcher {
   sync: boolean;
   dirty: boolean;
   active: boolean;
-  deps: Array<Dep>;
+  deps: Array<Dep>; // 需要在Watcher中记录自己都订阅了谁，也就是watcher实例被收集进了哪些Dep里
   newDeps: Array<Dep>;
   depIds: SimpleSet;
   newDepIds: SimpleSet;

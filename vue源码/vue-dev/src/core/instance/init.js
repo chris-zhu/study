@@ -90,6 +90,10 @@ export function initInternalComponent (vm: Component, options: InternalComponent
   }
 }
 
+/**
+ * 获取当前实例中构造函数的options选项及其所有父级的构造函数的options
+ * @param {*} Ctor 
+ */
 export function resolveConstructorOptions (Ctor: Class<Component>) {
   let options = Ctor.options
   if (Ctor.super) {

@@ -56,8 +56,8 @@ export default class VNode {
     this.raw = false
     this.isStatic = false
     this.isRootInsert = true
-    this.isComment = false
-    this.isCloned = false
+    this.isComment = false // 注释节点
+    this.isCloned = false // 克隆节点
     this.isOnce = false
     this.asyncFactory = asyncFactory
     this.asyncMeta = undefined

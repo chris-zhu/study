@@ -14,7 +14,7 @@ import {
 import {
   extend,
   hasOwn,
-  camelize,
+  camelize, // 转为驼峰格式
   toRawType,
   capitalize,
   isBuiltInTag,
@@ -294,6 +294,11 @@ export function validateComponentName (name: string) {
 /**
  * Ensure all props option syntax are normalized into the
  * Object-based format.
+ */
+/**
+ * 对options.props进行规格化
+ * @param {*} options 
+ * @param {*} vm 
  */
 function normalizeProps (options: Object, vm: ?Component) {
   const props = options.props

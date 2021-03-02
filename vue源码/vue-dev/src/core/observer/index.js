@@ -4,7 +4,7 @@ import Dep from './dep'
 import VNode from '../vdom/vnode'
 import { arrayMethods } from './array'
 import {
-  def,
+  def, // def (obj, key, value, ?enumerable)  obj[key] = value, 并设置obj的key是否可枚举
   warn,
   hasOwn,
   hasProto,
@@ -34,6 +34,8 @@ export function toggleObserving (value: boolean) {
  * object's property keys into getter/setters that
  * collect dependencies and dispatch updates.
  */
+
+//   val = {a: 1, b: { c: 2}}
 export class Observer {
   value: any;
   dep: Dep;
@@ -159,6 +161,7 @@ export function defineReactive (
     configurable: true,
     get: function reactiveGetter () {
       const value = getter ? getter.call(obj) : val
+      // Dep.target --> Watcher
       if (Dep.target) {
         dep.depend()
         if (childOb) {

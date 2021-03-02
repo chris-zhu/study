@@ -16,6 +16,7 @@ export function initProvide (vm: Component) {
 export function initInjections (vm: Component) {
   const result = resolveInject(vm.$options.inject, vm)
   if (result) {
+    // 通知 defineReactive 不要将内容转换成响应式
     toggleObserving(false)
     Object.keys(result).forEach(key => {
       /* istanbul ignore else */
