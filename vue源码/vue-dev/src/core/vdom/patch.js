@@ -10,6 +10,11 @@
  * of making flow understand it is not worth it.
  */
 
+ /** patch
+  * 1. 创建新增的节点
+  * 2. 删除已经废弃的节点
+  * 3. 修改需要更新的节点
+  */
 import VNode, { cloneVNode } from './vnode'
 import config from '../config'
 import { SSR_ATTR } from 'shared/constants'
@@ -358,6 +363,12 @@ export function createPatchFunction (backend) {
     }
   }
 
+  /**
+   * 删除节点数组中startIdx到endIdx指定的内容
+   * @param {*} vnodes 
+   * @param {*} startIdx 
+   * @param {*} endIdx 
+   */
   function removeVnodes (vnodes, startIdx, endIdx) {
     for (; startIdx <= endIdx; ++startIdx) {
       const ch = vnodes[startIdx]
@@ -551,6 +562,7 @@ export function createPatchFunction (backend) {
       for (i = 0; i < cbs.update.length; ++i) cbs.update[i](oldVnode, vnode)
       if (isDef(i = data.hook) && isDef(i = i.update)) i(oldVnode, vnode)
     }
+    // 没有文本节点  那么为元素节点
     if (isUndef(vnode.text)) {
       if (isDef(oldCh) && isDef(ch)) {
         if (oldCh !== ch) updateChildren(elm, oldCh, ch, insertedVnodeQueue, removeOnly)

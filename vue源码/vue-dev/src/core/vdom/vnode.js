@@ -29,6 +29,23 @@ export default class VNode {
   devtoolsMeta: ?Object; // used to store functional render context for devtools
   fnScopeId: ?string; // functional scope id support
 
+  /**
+   * Vnode类型
+   * 1. 注释节点：  只有两个有效属性 { text:'注释文本'，isComment: true }
+   * 2. 文本节点：  { text: '文本内容' }
+   * 3. 元素节点： 通常存在4个有效属性 
+   *              { tag: 节点名称  div，p
+   *                data: 该节点上的数据，例如 attrs，class，style
+   *                children: [Vnode子节点列表]
+   *                context: 当前组件的vue实例
+   *              }
+   * 4. 组件节点：  {  componentOptions: 组件节点的选项参数， propsData,tag,children
+   *                  componentIstance: 当前组件的实例
+   *                }
+   * 5. 函数节点：  { fnContext，fnOptions }
+   * 6. 克隆节点：  克隆节点与被克隆节点一致， 区别： 克隆节点：{ isCloned: true }， 被克隆节点：{ isCloned: false }
+   */
+
   constructor (
     tag?: string,
     data?: VNodeData,
@@ -39,7 +56,7 @@ export default class VNode {
     componentOptions?: VNodeComponentOptions,
     asyncFactory?: Function
   ) {
-    this.tag = tag
+    this.tag = tag  // tag存在： 元素节点  注释节点  文本节点
     this.data = data
     this.children = children
     this.text = text
@@ -88,7 +105,7 @@ export function createTextVNode (val: string | number) {
 // on their elm reference.
 export function cloneVNode (vnode: VNode): VNode {
   const cloned = new VNode(
-    vnode.tag,
+    vnode.tag, 
     vnode.data,
     // #7975
     // clone children array to avoid mutating original in case of cloning
