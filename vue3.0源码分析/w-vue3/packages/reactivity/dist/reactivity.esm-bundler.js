@@ -1,4 +1,5 @@
 const isArray = Array.isArray;
+const isFunction = (val) => typeof val === 'function';
 const isString = (val) => typeof val === 'string';
 const isObject = (val) => val !== null && typeof val === 'object';
 const extend = Object.assign;
@@ -83,9 +84,10 @@ function track(target, type, key) {
 }
 function trigger(target, type, key, newValue, oldvalue) {
     const depsMap = targetMap.get(target);
+    console.log(depsMap);
     if (!depsMap)
         return;
-    const effects = new Set(); // 将所有的 effect 存入一个集合中
+    const effects = new Set(); // 将所有的 effect 存入一个集合中  会自动去重
     /** 将set里面的收集effect添加到effects中 */
     const add = (effectsToAdd) => {
         if (effectsToAdd) {
@@ -140,7 +142,15 @@ function trigger(target, type, key, newValue, oldvalue) {
                 break;
         }
     }
-    effects.forEach((effect) => effect());
+    const run = (effect) => {
+        if (effect.options.scheduler) {
+            effect.options.scheduler(effect);
+        }
+        else {
+            effect();
+        }
+    };
+    effects.forEach(run);
 }
 
 const get = createGetter();
@@ -199,6 +209,8 @@ const shallowReadonlyHandlers = extend({}, readonlyHandlers, {
     get: shallowReadonlyGet,
 });
 
+const reactiveMap = new WeakMap();
+const readonlyMap = new WeakMap();
 function reactive(target) {
     return createReactiveObject(target, false, mutableHandlers);
 }
@@ -211,8 +223,6 @@ function readonly(target) {
 function shallowReadonly(target) {
     return createReactiveObject(target, true, shallowReadonlyHandlers);
 }
-const reactiveMap = new WeakMap();
-const readonlyMap = new WeakMap();
 function createReactiveObject(target, isReadonly, baseHandlers) {
     if (!isObject(target))
         return target;
@@ -226,6 +236,93 @@ function createReactiveObject(target, isReadonly, baseHandlers) {
     proxyMap.set(target, proxy);
     return proxy;
 }
+// export function isReactive(value: unknown): boolean {
+//   if (isReadonly(value)) {
+//     return isReactive((value as Target)[ReactiveFlags.RAW])
+//   }
+//   return !!(value && (value as Target)[ReactiveFlags.IS_REACTIVE])
+// }
+// export function isReadonly(value: unknown): boolean {
+//   return !!(value && (value as Target)[ReactiveFlags.IS_READONLY])
+// }
+// export function isProxy(value: unknown): boolean {
+//   return isReactive(value) || isReadonly(value)
+// }
 
-export { effect, reactive, readonly, shallowReactive, shallowReadonly };
+function ref(value) {
+    return createRef(value);
+}
+class RefImpl {
+    constructor(_rawValue, _shallow = false) {
+        this._rawValue = _rawValue;
+        this._shallow = _shallow;
+        this.__v_isRef = true;
+        this._value = _shallow ? _rawValue : convert(_rawValue);
+    }
+    get value() {
+        track(this, "get" /* GET */, 'value');
+        return this._value;
+    }
+    set value(newValue) {
+        if (hasChanged(newValue, this._rawValue)) {
+            this._rawValue = newValue;
+            this._value = this._shallow ? newValue : convert(newValue);
+            trigger(this, "set" /* SET */, 'value', newValue);
+        }
+    }
+}
+function createRef(rawValue, shallow = false) {
+    if (isRef(rawValue))
+        return rawValue;
+    return new RefImpl(rawValue, shallow);
+}
+function isRef(r) {
+    return Boolean(r && r.__v_isRef === true);
+}
+const convert = (val) => isObject(val) ? reactive(val) : val;
+
+const NOOP = () => { };
+class ComputedRefImpl {
+    constructor(getter, setter, isReadonly) {
+        this.setter = setter;
+        this._dirty = true;
+        this.__v_isRef = true;
+        this.effect = effect(getter, {
+            lazy: true,
+            scheduler: () => {
+                if (!this._dirty) {
+                    this._dirty = true;
+                    trigger(this, "set" /* SET */, 'value');
+                }
+            }
+        });
+        this['__v_isReadonly'] = isReadonly;
+    }
+    get value() {
+        if (this._dirty) {
+            this._value = this.effect();
+            this._dirty = false;
+        }
+        track(this, "get" /* GET */, 'value');
+        return this._value;
+    }
+    set value(newVal) {
+        this.setter(newVal);
+    }
+}
+function computed(getterOrOptions) {
+    let getter;
+    let setter;
+    if (isFunction(getterOrOptions)) {
+        getter = getterOrOptions;
+        setter = NOOP;
+    }
+    else {
+        getter = getterOrOptions.get;
+        setter = getterOrOptions.set;
+    }
+    return new ComputedRefImpl(getter, setter, isFunction(getterOrOptions) || !getterOrOptions.set);
+}
+
+export { computed, effect, reactive, readonly, ref, shallowReactive, shallowReadonly };
 //# sourceMappingURL=reactivity.esm-bundler.js.map

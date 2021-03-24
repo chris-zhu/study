@@ -17,23 +17,25 @@
       shallowReactive,
       shallowReadonly,
       readonly,
-      effect
+      effect,
+      ref,
+      computed
     } = VueReactivity
 
 
-    let a = reactive({
-      name: 'nameA',
-      age: {
-        text: 18
-      },
-      arr: [1, 2, 3]
+    const a= ref(1)
+    const b= ref(2)
+    const c = computed(()=>{
+      return a.value + b.value
     })
+    
+
     effect(() => {
-      app.innerHTML = a.arr.toString()
+      app.innerHTML = c.value
     })
 
     setTimeout(() => {
-      a.arr[100] = 100
+      a.value = 'hahah'
     }, 1000)
   </script>
 </body>

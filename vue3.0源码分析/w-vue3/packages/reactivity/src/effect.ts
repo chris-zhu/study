@@ -77,9 +77,11 @@ export function track(target, type, key) {
 
 export function trigger(target, type, key?, newValue?, oldvalue?) {
   const depsMap = targetMap.get(target)
+  console.log(depsMap);
+  
   if (!depsMap) return
 
-  const effects = new Set() // 将所有的 effect 存入一个集合中
+  const effects = new Set() // 将所有的 effect 存入一个集合中  会自动去重
 
   /** 将set里面的收集effect添加到effects中 */
   const add = (effectsToAdd: Set<any>) => {
@@ -137,6 +139,14 @@ export function trigger(target, type, key?, newValue?, oldvalue?) {
 
   }
 
-  effects.forEach((effect: any) => effect())
+  const run = (effect: any) => {
+    if (effect.options.scheduler) {
+      effect.options.scheduler(effect)
+    } else {
+      effect()
+    }
+  }
+
+  effects.forEach(run)
 
 }
