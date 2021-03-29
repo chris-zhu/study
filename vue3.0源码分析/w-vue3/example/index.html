@@ -29,13 +29,15 @@
       return a.value + b.value
     })
     
-
+ const arr = reactive([1,2,3])
+ 
+ 
     effect(() => {
-      app.innerHTML = c.value
+      app.innerHTML = arr.toString()
     })
 
     setTimeout(() => {
-      a.value = 'hahah'
+      arr.length = 2
     }, 1000)
   </script>
 </body>

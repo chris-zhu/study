@@ -73,11 +73,13 @@ export function track(target, type, key) {
     dep.add(activeEffect)
     activeEffect.deps.push(dep)
   }
+  console.log(targetMap);
+  
 }
 
 export function trigger(target, type, key?, newValue?, oldvalue?) {
   const depsMap = targetMap.get(target)
-  console.log(depsMap);
+  // console.log(depsMap);
   
   if (!depsMap) return
 

@@ -81,10 +81,11 @@ function track(target, type, key) {
         dep.add(activeEffect);
         activeEffect.deps.push(dep);
     }
+    console.log(targetMap);
 }
 function trigger(target, type, key, newValue, oldvalue) {
     const depsMap = targetMap.get(target);
-    console.log(depsMap);
+    // console.log(depsMap);
     if (!depsMap)
         return;
     const effects = new Set(); // 将所有的 effect 存入一个集合中  会自动去重
