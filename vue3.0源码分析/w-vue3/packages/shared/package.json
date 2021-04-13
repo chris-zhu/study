@@ -1,0 +1,14 @@
+{
+  "name": "@vue/shared",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "module": "dist/shard.esm-bundler.js",
+  "buildOpitons": {
+    "name": "VueShared",
+    "formats": [
+      "cjs",
+      "esm-bundler"
+    ]
+  }
+}
