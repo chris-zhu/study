@@ -27,3 +27,10 @@ function sort(arr) {
 sort(arr)
 
 console.log(arr);
+
+for (let i = 0; i < arr.length; i++) {
+  let max = arr[0]
+  for (let j = 0; i < arr.length - i; j++) {
+    if()
+  }
+}

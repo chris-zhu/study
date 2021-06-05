@@ -17,3 +17,26 @@ function quickSort(arr) {
 }
 
 console.log(quickSort(array));
+
+
+
+
+
+var fn = arr => {
+  if (!arr || arr.length === 0) return []
+  var leader = arr[0]
+  var left = []
+  var right = []
+
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i] < leader) left.push(arr[i])
+    else right.push(arr[i])
+  }
+
+  left = fn(left)
+  right = fn(right)
+
+  return [...left, leader, ...right]
+}
+
+console.log(fn(array))
