@@ -20,7 +20,6 @@ export const createVNode = function (
     children,
     shapeFlag: getShapeFlag(type),
   };
-
   // 基于 children 再次设置 shapeFlag
   if (Array.isArray(children)) {
     vnode.shapeFlag |= ShapeFlags.ARRAY_CHILDREN;
